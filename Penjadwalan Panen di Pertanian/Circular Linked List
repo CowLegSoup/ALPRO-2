@@ -105,11 +105,28 @@ class CircularLinkedList:
             current = current.next
         print("Tanaman tidak ditemukan.")
 
+    def Length(self):
+        """Menghitung jumlah tanaman dalam daftar"""
+        count = 0
+        if self.head is not None:
+            current = self.head
+            while True:
+                count += 1
+                current = current.next
+                if current == self.head:
+                    break
+        return count
+
     def tampilkan_jadwal(self):
         if self.head is None:
             print("Jadwal panen kosong.")
             return
 
+        # Tampilkan jumlah tanaman
+        jumlah_tanaman = self.Length()
+        print(f"Jumlah Tanaman: {jumlah_tanaman}")
+
+        # Tampilkan jadwal panen
         current = self.head
         print("Jadwal Panen sesuai prioritas:")
         while True:
