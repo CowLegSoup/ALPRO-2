@@ -1,1 +1,126 @@
+class Node:
+    def __init__(self, tanaman, hari_panen):
+        self.tanaman = tanaman
+        self.hari_panen = hari_panen
+        self.next = None
+        self.prev = None
+
+class JadwalPanen:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+    
+    def tambah_tanaman(self, tanaman, hari_panen):
+        new_node = Node(tanaman, hari_panen)
+        if not self.head:
+            self.head = self.tail = new_node
+        else:
+            current = self.head
+            while current and current.hari_panen <= hari_panen:
+                current = current.next
+            
+            if current is None:
+                self.tail.next = new_node
+                new_node.prev = self.tail
+                self.tail = new_node
+            elif current == self.head:
+                new_node.next = self.head
+                self.head.prev = new_node
+                self.head = new_node
+            else:
+                prev_node = current.prev
+                prev_node.next = new_node
+                new_node.prev = prev_node
+                new_node.next = current
+                current.prev = new_node
+    
+    def hapus_tanaman(self, tanaman):
+        current = self.head
+        while current:
+            if current.tanaman == tanaman:
+                if current.prev:
+                    current.prev.next = current.next
+                else:
+                    self.head = current.next
+                if current.next:
+                    current.next.prev = current.prev
+                else:
+                    self.tail = current.prev
+                return True
+            current = current.next
+        return False
+    
+    def prioritas_tanaman(self, tanaman):
+        current = self.head
+        while current:
+            if current.tanaman == tanaman:
+                # Meminta pengguna memasukkan hari panen baru
+                hari_panen_baru = int(input(f"Masukkan hari ke berapa panen untuk {tanaman}: "))
+                
+                # Jika tanaman sudah di posisi head, tidak perlu memindahkannya lagi
+                if current == self.head:
+                    current.hari_panen = hari_panen_baru
+                    return
+                
+                # Menghapus tanaman dari posisinya sebelumnya
+                if current.prev:
+                    current.prev.next = current.next
+                if current.next:
+                    current.next.prev = current.prev
+                if current == self.tail:
+                    self.tail = current.prev
+                
+                # Memperbarui hari panen dengan nilai baru
+                current.hari_panen = hari_panen_baru
+                
+                # Memasukkan tanaman ke posisi terdepan
+                current.next = self.head
+                self.head.prev = current
+                self.head = current
+                self.head.prev = None
+                return
+            current = current.next
+    
+    def tampilkan_jadwal(self):
+        current = self.head
+        hasil = []
+        while current:
+            hasil.append(f"{current.tanaman} - Panen Hari ke-{current.hari_panen}")
+            current = current.next
+        return "\n".join(hasil)
+
+# Program utama dengan input dari pengguna
+jadwal = JadwalPanen()
+while True:
+    print("\nMenu:")
+    print("1. Tambah tanaman")
+    print("2. Hapus tanaman")
+    print("3. Prioritaskan tanaman")
+    print("4. Lihat jadwal panen")
+    print("5. Keluar")
+    pilihan = input("Pilih menu: ")
+    
+    if pilihan == "1":
+        tanaman = input("Masukkan nama tanaman: ")
+        hari_panen = int(input("Masukkan hari ke berapa panen: "))
+        jadwal.tambah_tanaman(tanaman, hari_panen)
+        print(f"{tanaman} telah ditambahkan ke jadwal panen.")
+    elif pilihan == "2":
+        tanaman = input("Masukkan nama tanaman yang ingin dihapus: ")
+        if jadwal.hapus_tanaman(tanaman):
+            print(f"{tanaman} berhasil dihapus dari jadwal panen.")
+        else:
+            print(f"{tanaman} tidak ditemukan dalam jadwal.")
+    elif pilihan == "3":
+        tanaman = input("Masukkan nama tanaman yang ingin diprioritaskan: ")
+        jadwal.prioritas_tanaman(tanaman)
+        print(f"{tanaman} telah diprioritaskan dalam jadwal panen.")
+    elif pilihan == "4":
+        print("\nJadwal Panen:")
+        print(jadwal.tampilkan_jadwal())
+    elif pilihan == "5":
+        print("Keluar dari program.")
+        break
+    else:
+        print("Pilihan tidak valid.")
 
