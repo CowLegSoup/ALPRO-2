@@ -7,6 +7,7 @@ class Node:
 class JadwalPanen:
     def _init_(self):
         self.head = None
+        self.size = 0  # Tambahkan variabel untuk menyimpan jumlah tanaman
     
     def tambah_tanaman(self, tanaman, hari_panen):
         new_node = Node(tanaman, hari_panen)
@@ -14,11 +15,11 @@ class JadwalPanen:
             self.head = new_node
         else:
             current = self.head
-            # Temukan posisi yang tepat untuk menambahkan node berdasarkan hari panen
             while current.next and current.next.hari_panen <= hari_panen:
                 current = current.next
             new_node.next = current.next
             current.next = new_node
+        self.size += 1  # Tambahkan 1 ke ukuran linked list
     
     def hapus_tanaman(self, tanaman):
         current = self.head
@@ -29,6 +30,7 @@ class JadwalPanen:
                     prev.next = current.next
                 else:
                     self.head = current.next
+                self.size -= 1  # Kurangi ukuran linked list saat ada yang dihapus
                 return True
             prev = current
             current = current.next
@@ -39,24 +41,20 @@ class JadwalPanen:
         prev = None
         while current:
             if current.tanaman == tanaman:
-                # Meminta pengguna memasukkan hari panen baru
                 hari_panen_baru = int(input(f"Masukkan hari ke berapa panen untuk {tanaman}: "))
-                
-                # Menghapus tanaman dari posisinya sebelumnya
                 if prev:
                     prev.next = current.next
                 else:
                     self.head = current.next
-
-                # Memperbarui hari panen dengan nilai baru
                 current.hari_panen = hari_panen_baru
-                
-                # Masukkan kembali tanaman dengan posisi yang sesuai
                 self.tambah_tanaman(current.tanaman, current.hari_panen)
                 return
             prev = current
             current = current.next
-    
+
+    def length(self):  # Method untuk menghitung jumlah tanaman
+        return self.size
+
     def tampilkan_jadwal(self):
         current = self.head
         hasil = []
@@ -73,7 +71,8 @@ while True:
     print("2. Hapus tanaman")
     print("3. Prioritaskan tanaman")
     print("4. Lihat jadwal panen")
-    print("5. Keluar")
+    print("5. Lihat jumlah tanaman dalam jadwal")
+    print("6. Keluar")
     pilihan = input("Pilih menu: ")
     
     if pilihan == "1":
@@ -95,6 +94,8 @@ while True:
         print("\nJadwal Panen:")
         print(jadwal.tampilkan_jadwal())
     elif pilihan == "5":
+        print(f"Jumlah tanaman dalam jadwal panen: {jadwal.length()}")  # Tambahkan opsi melihat jumlah tanaman
+    elif pilihan == "6":
         print("Keluar dari program.")
         break
     else:
