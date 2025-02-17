@@ -1,1 +1,151 @@
+class Node:
+    def __init__(self, tanaman, prioritas):
+        self.tanaman = tanaman
+        self.prioritas = prioritas
+        self.next = None
+        self.prev = None
 
+
+class CircularLinkedList:
+    def __init__(self):
+        self.head = None
+
+    def geser_prioritas(self, mulai_dari):
+        """Menggeser semua prioritas mulai dari nilai tertentu ke belakang"""
+        if self.head is None:
+            return
+
+        current = self.head
+        while True:
+            if current.prioritas >= mulai_dari:
+                current.prioritas += 1
+            current = current.next
+            if current == self.head:
+                break
+
+    def tambah_tanaman(self, tanaman, prioritas):
+        # Cek apakah prioritas sudah ada
+        if self.head is not None:
+            current = self.head
+            while True:
+                if current.prioritas == prioritas:
+                    print(f"Prioritas {prioritas} sudah ada. Menggeser prioritas yang lebih besar.")
+                    self.geser_prioritas(prioritas)
+                    break
+                current = current.next
+                if current == self.head:
+                    break
+
+        new_node = Node(tanaman, prioritas)
+
+        if self.head is None:  # Jika daftar kosong
+            self.head = new_node
+            self.head.next = self.head
+            self.head.prev = self.head
+            return
+
+        # Sisipkan node baru berdasarkan prioritas
+        current = self.head
+        while True:
+            if current.prioritas > prioritas:  # Temukan posisi yang tepat
+                new_node.next = current
+                new_node.prev = current.prev
+                current.prev.next = new_node
+                current.prev = new_node
+                if current == self.head:  # Jika node baru menjadi head
+                    self.head = new_node
+                return
+            if current.next == self.head:  # Jika sampai akhir, tambahkan di akhir
+                new_node.next = self.head
+                new_node.prev = current
+                current.next = new_node
+                self.head.prev = new_node
+                return
+            current = current.next
+
+    def hapus_tanaman(self, prioritas):
+        if self.head is None:
+            print("Jadwal panen kosong.")
+            return
+
+        current = self.head
+        while True:
+            if current.prioritas == prioritas:
+                if current.next == current:  # Jika hanya satu elemen
+                    self.head = None
+                else:
+                    current.prev.next = current.next
+                    current.next.prev = current.prev
+                    if current == self.head:
+                        self.head = current.next
+                print(f"Tanaman dengan prioritas {prioritas} telah dihapus.")
+                return
+            if current.next == self.head:
+                break
+            current = current.next
+        print("Prioritas tidak ditemukan.")
+
+    def ubah_prioritas(self, tanaman, prioritas_baru):
+        if self.head is None:
+            print("Jadwal panen kosong.")
+            return
+
+        # Cari tanaman yang akan diubah
+        current = self.head
+        while True:
+            if current.tanaman == tanaman:
+                prioritas_lama = current.prioritas
+                self.hapus_tanaman(prioritas_lama)  # Hapus elemen lama
+                self.geser_prioritas(prioritas_baru)  # Geser prioritas yang lebih besar
+                self.tambah_tanaman(tanaman, prioritas_baru)  # Tambahkan dengan prioritas baru
+                print(f"Prioritas {tanaman} diubah ke {prioritas_baru}.")
+                return
+            if current.next == self.head:
+                break
+            current = current.next
+        print("Tanaman tidak ditemukan.")
+
+    def tampilkan_jadwal(self):
+        if self.head is None:
+            print("Jadwal panen kosong.")
+            return
+
+        current = self.head
+        print("Jadwal Panen sesuai prioritas:")
+        while True:
+            print(f"{current.prioritas}. {current.tanaman}")
+            current = current.next
+            if current == self.head:
+                break
+
+
+# Menu interaktif
+jadwal_panen = CircularLinkedList()
+
+while True:
+    print("\nMenu:")
+    print("1. Tambah Tanaman")
+    print("2. Hapus Tanaman")
+    print("3. Ubah Prioritas")
+    print("4. Tampilkan Jadwal")
+    print("5. Keluar")
+
+    pilihan = input("Pilih opsi: ")
+
+    if pilihan == "1":
+        tanaman = input("Masukkan nama tanaman: ")
+        prioritas = int(input("Masukkan prioritas: "))
+        jadwal_panen.tambah_tanaman(tanaman, prioritas)
+    elif pilihan == "2":
+        prioritas = int(input("Masukkan prioritas yang ingin dihapus: "))
+        jadwal_panen.hapus_tanaman(prioritas)
+    elif pilihan == "3":
+        tanaman = input("Masukkan nama tanaman yang ingin diubah prioritasnya: ")
+        prioritas_baru = int(input("Masukkan prioritas baru: "))
+        jadwal_panen.ubah_prioritas(tanaman, prioritas_baru)
+    elif pilihan == "4":
+        jadwal_panen.tampilkan_jadwal()
+    elif pilihan == "5":
+        break
+    else:
+        print("Pilihan tidak valid. Silakan coba lagi.")
