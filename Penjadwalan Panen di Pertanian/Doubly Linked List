@@ -50,12 +50,20 @@ class JadwalPanen:
             current = current.next
         return False
     
+    def panjang_jadwal(self):
+        current = self.head
+        panjang = 0
+        while current:
+            panjang += 1
+            current = current.next
+        return panjang
+    
     def prioritas_tanaman(self, tanaman):
         current = self.head
         while current:
             if current.tanaman == tanaman:
                 # Meminta pengguna memasukkan hari panen baru
-                hari_panen_baru = int(input(f"Masukkan hari ke berapa panen untuk {tanaman}: "))
+                hari_panen_baru = int(input(f"Masukkan hari panen baru untuk {tanaman}: "))
                 
                 # Jika tanaman sudah di posisi head, tidak perlu memindahkannya lagi
                 if current == self.head:
@@ -89,6 +97,11 @@ class JadwalPanen:
             current = current.next
         return "\n".join(hasil)
 
+    def tampilkan_jadwal_dan_panjang(self):
+        panjang = self.panjang_jadwal()
+        jadwal = self.tampilkan_jadwal()
+        return f"Panjang jadwal panen: {panjang} tanaman.\n{jadwal}"
+
 # Program utama dengan input dari pengguna
 jadwal = JadwalPanen()
 while True:
@@ -96,13 +109,13 @@ while True:
     print("1. Tambah tanaman")
     print("2. Hapus tanaman")
     print("3. Prioritaskan tanaman")
-    print("4. Lihat jadwal panen")
+    print("4. Lihat jadwal dan panjang jadwal panen")
     print("5. Keluar")
     pilihan = input("Pilih menu: ")
     
     if pilihan == "1":
         tanaman = input("Masukkan nama tanaman: ")
-        hari_panen = int(input("Masukkan hari ke berapa panen: "))
+        hari_panen = int(input("Masukkan hari panen: "))
         jadwal.tambah_tanaman(tanaman, hari_panen)
         print(f"{tanaman} telah ditambahkan ke jadwal panen.")
     elif pilihan == "2":
@@ -116,11 +129,10 @@ while True:
         jadwal.prioritas_tanaman(tanaman)
         print(f"{tanaman} telah diprioritaskan dalam jadwal panen.")
     elif pilihan == "4":
-        print("\nJadwal Panen:")
-        print(jadwal.tampilkan_jadwal())
+        print("\nJadwal Panen dan Panjang Jadwal:")
+        print(jadwal.tampilkan_jadwal_dan_panjang())
     elif pilihan == "5":
         print("Keluar dari program.")
         break
     else:
         print("Pilihan tidak valid.")
-
