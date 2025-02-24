@@ -53,6 +53,42 @@ def bfs_jarak(start, end, adj):
                 q.append((neighbor, jarak + 1))
     return -1
 
+def pre_order_traversal(node, adj, visited):
+    if node not in visited:
+        visited.add(node)
+        result = [node]
+        for neighbor in sorted(adj[node]):
+            result += pre_order_traversal(neighbor, adj, visited)
+        return result
+    else:
+        return []
+
+def in_order_traversal(node, adj, visited):
+    if node not in visited:
+        visited.add(node)
+        result = []
+        neighbors = sorted(adj[node])
+        if neighbors:
+            result += in_order_traversal(neighbors[0], adj, visited)
+        result.append(node)
+        for neighbor in neighbors[1:]:
+            result += in_order_traversal(neighbor, adj, visited)
+        return result
+    else:
+        return []
+
+def post_order_traversal(node, adj, visited):
+    if node not in visited:
+        visited.add(node)
+        result = []
+        neighbors = sorted(adj[node])
+        for neighbor in neighbors:
+            result += post_order_traversal(neighbor, adj, visited)
+        result.append(node)
+        return result
+    else:
+        return []
+
 def tentukan_akar(adj):
     return next(iter(adj))
 
@@ -74,5 +110,18 @@ def main():
     cetak_leaf_node(akar, adj)
     print("\n\nTinggi tree adalah:", tinggi_tree(akar, adj))
     print("\nDiameter tree adalah:", diameter_tree(akar, adj))
+
+    # Traversal dengan format rapi
+    print("\nPre-order traversal:")
+    pre_nodes = pre_order_traversal(akar, adj, set())
+    print(" → ".join(pre_nodes))
+
+    print("\nIn-order traversal:")
+    in_nodes = in_order_traversal(akar, adj, set())
+    print(" → ".join(in_nodes))
+
+    print("\nPost-order traversal:")
+    post_nodes = post_order_traversal(akar, adj, set())
+    print(" → ".join(post_nodes))
 
 main()
