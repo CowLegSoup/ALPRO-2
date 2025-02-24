@@ -67,28 +67,18 @@ def in_order_traversal(node, adj, visited, parent=None):
     if node not in visited:
         visited.add(node)
         result = []
-        neighbors = sorted(adj[node])  # Urutkan tetangga
+        neighbors = sorted([n for n in adj[node] if n != parent])  # Filter parent
 
-        # Tetapkan left dan right child berdasarkan parent
-        left_child = None
-        right_child = None
-
-        if len(neighbors) >= 1:
-            left_child = neighbors[0]
-        if len(neighbors) >= 2:
-            right_child = neighbors[1]
-
-        # Rekursi ke kiri
-        if left_child and left_child != parent:
-            result += in_order_traversal(left_child, adj, visited, node)
-
-        # Tambahkan root
-        result.append(node)
-
-        # Rekursi ke kanan
-        if right_child and right_child != parent:
-            result += in_order_traversal(right_child, adj, visited, node)
-
+        if neighbors:
+            # Kunjungi anak pertama
+            result += in_order_traversal(neighbors[0], adj, visited, node)
+            # Kunjungi node itu sendiri
+            result.append(node)
+            # Kunjungi anak-anak selanjutnya
+            for neighbor in neighbors[1:]:
+                result += in_order_traversal(neighbor, adj, visited, node)
+        else:
+            result.append(node)  # Jika tidak ada anak, tambahkan node itu sendiri
         return result
     else:
         return []
