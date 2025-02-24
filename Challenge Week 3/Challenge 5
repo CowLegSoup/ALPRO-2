@@ -1,1 +1,147 @@
+from collections import deque
 
+def tambah_edge(x, y, adj):
+    if x not in adj:
+        adj[x] = []
+    if y not in adj:
+        adj[y] = []
+    adj[x].append(y)
+    adj[y].append(x)
+
+def cetak_parent(node, adj, parent):
+    if parent == "":
+        print("{}-->".format(node))
+    else:
+        print("{}-->{}".format(node, parent))
+
+    for cur in adj[node]:
+        if cur != parent:
+            cetak_parent(cur, adj, node)
+
+def cetak_child(akar, adj):
+    q = deque()
+    q.append(akar)
+    visited = {node: False for node in adj}
+    while q:  # BFS
+        node = q.popleft()
+        visited[node] = True
+        print("{}-->".format(node), end="")
+        for cur in adj[node]:
+            if not visited[cur]:
+                print(cur, end=" ")
+                q.append(cur)
+        print()
+
+def cetak_leaf_node(akar, adj):
+    for node in adj:
+        if len(adj[node]) == 1 and node != akar:
+            print(node, end=" ")
+
+def cetak_derajat(akar, adj):
+    for node in adj:
+        print("{} :".format(node), end=" ")
+        if node == akar:
+            print(len(adj[node]))
+        else:
+            print(len(adj[node]) - 1)
+
+def tinggi_tree(akar, adj):
+    tinggi = 0
+    q = deque([(akar, 0)])
+    visited = {node: False for node in adj}
+    visited[akar] = True
+
+    while q:
+        node, kedalaman = q.popleft()
+        tinggi = max(tinggi, kedalaman)
+        for tetangga in adj[node]:
+            if not visited[tetangga]:
+                visited[tetangga] = True
+                q.append((tetangga, kedalaman + 1))
+
+    return tinggi
+
+def depth_tree(node, adj, target):
+    depth = -1
+    q = deque([(node, 0)])
+    visited = {node: False for node in adj}
+    visited[node] = True
+    while q:
+        current, kedalaman = q.popleft()
+        if current == target:
+            depth = kedalaman
+            break
+        for tetangga in adj[current]:
+            if not visited[tetangga]:
+                visited[tetangga] = True
+                q.append((tetangga, kedalaman + 1))
+    return depth
+
+def diameter_tree(akar, adj):
+    diameter = 0
+    nodes = list(adj.keys())
+    for i in range(len(nodes)):
+        for j in range(i + 1, len(nodes)):
+            jarak = bfs_jarak(nodes[i], nodes[j], adj)
+            diameter = max(diameter, jarak)
+    return diameter
+
+def bfs_jarak(start, end, adj):
+    q = deque([(start, 0)])
+    visited = {node: False for node in adj}
+    visited[start] = True
+    while q:
+        node, jarak = q.popleft()
+        if node == end:
+            return jarak
+
+        for neighbor in adj[node]:
+            if not visited[neighbor]:
+                visited[neighbor] = True
+                q.append((neighbor, jarak + 1))
+    return -1
+
+def main():
+    akar = "A"
+    adj = {}
+
+    tambah_edge("A", "B", adj)
+    tambah_edge("A", "C", adj)
+    tambah_edge("A", "D", adj)
+    tambah_edge("A", "E", adj)
+    tambah_edge("B", "F", adj)
+    tambah_edge("B", "G", adj)
+    tambah_edge("B", "H", adj)
+    tambah_edge("H", "M", adj)
+    tambah_edge("H", "N", adj)
+    tambah_edge("H", "O", adj)
+    tambah_edge("N", "R", adj)
+    tambah_edge("O", "S", adj)
+    tambah_edge("O", "T", adj)
+    tambah_edge("C", "I", adj)
+    tambah_edge("I", "P", adj)
+    tambah_edge("D", "J", adj)
+    tambah_edge("E", "K", adj)
+    tambah_edge("E", "L", adj)
+    tambah_edge("K", "Q", adj)
+    tambah_edge("Q", "U", adj)
+
+    print("Parent dari setiap node adalah:")
+    cetak_parent(akar, adj, "")
+
+    print("\nChild dari setiap node adalah:")
+    cetak_child(akar, adj)
+
+    print("\nNode leaf dari tree adalah:")
+    cetak_leaf_node(akar, adj)
+
+    print("\nDerajat dari setiap node adalah:")
+    cetak_derajat(akar, adj)
+
+    print("\nTinggi tree adalah:", tinggi_tree(akar, adj))
+
+    print("\nDepth tree adalah:", depth_tree(akar, adj, "U"))
+
+    print("\nDiameter tree adalah:", diameter_tree(akar, adj))
+
+main()
