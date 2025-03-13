@@ -1,0 +1,16 @@
+id,title,genres,actors,director,year,rating
+1,The Shawshank Redemption,Drama,Tim Robbins|Morgan Freeman,Frank Darabont,1994,9.3
+2,The Godfather,Crime|Drama,Marlon Brando|Al Pacino,Francis Ford Coppola,1972,9.2
+3,The Dark Knight,Action|Crime|Drama,Christian Bale|Heath Ledger,Christopher Nolan,2008,9.0
+4,The Godfather: Part II,Crime|Drama,Al Pacino|Robert De Niro,Francis Ford Coppola,1974,9.0
+5,12 Angry Men,Crime|Drama,Henry Fonda|Lee J. Cobb,Sidney Lumet,1957,9.0
+6,Pulp Fiction,Crime|Drama,John Travolta|Uma Thurman|Samuel L. Jackson,Quentin Tarantino,1994,8.9
+7,Inception,Action|Adventure|Sci-Fi,Leonardo DiCaprio|Joseph Gordon-Levitt,Christopher Nolan,2010,8.8
+8,Fight Club,Drama,Brad Pitt|Edward Norton,David Fincher,1999,8.8
+9,The Matrix,Action|Sci-Fi,Keanu Reeves|Laurence Fishburne,Lana Wachowski,1999,8.7
+10,Interstellar,Adventure|Drama|Sci-Fi,Matthew McConaughey|Anne Hathaway,Christopher Nolan,2014,8.6
+11,Goodfellas,Biography|Crime|Drama,Robert De Niro|Ray Liotta|Joe Pesci,Martin Scorsese,1990,8.7
+12,The Silence of the Lambs,Crime|Drama|Thriller,Jodie Foster|Anthony Hopkins,Jonathan Demme,1991,8.6
+13,Django Unchained,Drama|Western,Jamie Foxx|Christoph Waltz|Leonardo DiCaprio|Samuel L. Jackson,Quentin Tarantino,2012,8.4
+14,Toy Story,Animation|Adventure|Comedy,Tom Hanks|Tim Allen,John Lasseter,1995,8.3
+15,The Departed,Crime|Drama|Thriller,Leonardo DiCaprio|Matt Damon|Jack Nicholson,Martin Scorsese,2006,8.5
