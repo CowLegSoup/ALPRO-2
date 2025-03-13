@@ -1,6 +1,3 @@
-# Interactive Film Recommendation System with CSV Integration
-# This program implements a film recommendation system using A* algorithm with CSV database
-
 import heapq
 import csv
 import os
